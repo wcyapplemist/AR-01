@@ -90,3 +90,50 @@ export function lerpPose(from: Pose, to: Pose, t: number): Pose {
     },
   };
 }
+
+export function conjugateQuaternion(q: Quaternion): Quaternion {
+  return { x: -q.x, y: -q.y, z: -q.z, w: q.w };
+}
+
+export function normalizeQuaternion(q: Quaternion): Quaternion {
+  const mag = Math.sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
+  if (mag === 0) return { x: 0, y: 0, z: 0, w: 1 };
+  return { x: q.x / mag, y: q.y / mag, z: q.z / mag, w: q.w / mag };
+}
+
+export function slerpQuaternion(
+  from: Quaternion,
+  to: Quaternion,
+  t: number,
+): Quaternion {
+  const a = normalizeQuaternion(from);
+  const b = normalizeQuaternion(to);
+  const dot = a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+  if (dot < 0) {
+    return slerpQuaternion(a, { x: -b.x, y: -b.y, z: -b.z, w: -b.w }, t);
+  }
+  if (dot > 0.9995) {
+    return normalizeQuaternion({
+      x: a.x + t * (b.x - a.x),
+      y: a.y + t * (b.y - a.y),
+      z: a.z + t * (b.z - a.z),
+      w: a.w + t * (b.w - a.w),
+    });
+  }
+  const theta0 = Math.acos(dot);
+  const theta = theta0 * t;
+  const sinTheta = Math.sin(theta);
+  const sinTheta0 = Math.sin(theta0);
+  const s0 = Math.cos(theta) - dot * sinTheta / sinTheta0;
+  const s1 = sinTheta / sinTheta0;
+  return normalizeQuaternion({
+    x: s0 * a.x + s1 * b.x,
+    y: s0 * a.y + s1 * b.y,
+    z: s0 * a.z + s1 * b.z,
+    w: s0 * a.w + s1 * b.w,
+  });
+}
+
+export function scaleVector(v: Vector3, s: number): Vector3 {
+  return { x: v.x * s, y: v.y * s, z: v.z * s };
+}
