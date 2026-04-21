@@ -1,19 +1,218 @@
 # AR Spatial Positioning — Implementation Plan
 
+## Overview
+
+AR Spatial Positioning system built with Next.js, featuring Three.js 3D rendering, device sensor-based positioning, QR code calibration, dual coordinate system with drift correction, and real-time AR overlay rendering on mobile devices.
+
+## Acceptance Criteria
+
+- Project skeleton runs with all module pages accessible (`/ar`, `/qr`, `/three`)
+- `/three` page displays a rotating 3D scene with grid and axes
+- `/ar` page shows real-time sensor pose data via debug dashboard
+- `/qr` page scans and parses QR Codes with overlay
+- QR scan initializes absolute coordinates; drift correction is active
+- Camera feed + 3D model overlay + HUD display renders correctly
+- Complete user flow works end-to-end on real devices (iOS Safari + Android Chrome)
+- Performance targets met; bugs fixed; documentation complete
+
+## Scope
+
+```
+src/
+├── app/                          # App Router pages (/, /ar, /qr, /three)
+├── modules/
+│   ├── ar/                       # AR sensor, positioning, overlay
+│   ├── qr/                       # QR scanning module
+│   └── three/                    # Three.js rendering module
+├── shared/
+│   └── utils/                    # Shared utilities (math, etc.)
+└── components/                   # Shared UI components
+```
+
 ## Phased Overview
 
-| Phase | Name | Objective | Est. Time |
-| ----- | ---- | --------- | --------- |
-| **P0** | Project scaffold & infrastructure | Next.js 初始化、模块骨架、路径别名、SSR 安全基础设施 | 2–3 days |
-| **P1** | Three.js standalone module | 纯 3D 场景渲染管线，独立演示页 `/three` | 3–4 days |
-| **P2** | Sensor-based positioning | DeviceMotion/Orientation 采集、6DoF 姿态估计、位置积分 | 4–5 days |
-| **P3** | QR Code scanning module | 摄像头 + jsQR 解码 + 内容验证，独立演示页 `/qr` | 2–3 days |
-| **P4** | Dual coordinate system & drift correction | 双坐标系（相对/绝对）、QR 校准、AR.js 视觉漂移校正 | 4–5 days |
-| **P5** | AR integration & overlay rendering | 摄像头背景 + 3D 模型叠加 + HUD 实时显示 | 3–4 days |
-| **P6** | Full integration & E2E testing | 首页集成、完整用户流程、真机端到端测试 | 3–4 days |
-| **P7** | Optimization & polish | 性能优化、UI 精细化、容错增强、文档完善 | 3–5 days |
+| Phase | Name | Objective | Est. Time | Status |
+| ----- | ---- | --------- | --------- | ------ |
+| **P0** | Project scaffold & infrastructure | Next.js initialization, module skeleton, path aliases, SSR-safe infrastructure | 2–3 days | **DONE** |
+| **P1** | Three.js standalone module | Standalone 3D scene rendering pipeline, demo page `/three` | 3–4 days | **DONE** |
+| **P2** | Sensor-based positioning | DeviceMotion/Orientation collection, 6DoF pose estimation, position integration | 4–5 days | Pending |
+| **P3** | QR Code scanning module | Camera + jsQR decode + content validation, demo page `/qr` | 2–3 days | Pending |
+| **P4** | Dual coordinate system & drift correction | Dual coord system (relative/absolute), QR calibration, AR.js visual drift correction | 4–5 days | Pending |
+| **P5** | AR integration & overlay rendering | Camera background + 3D model overlay + HUD real-time display | 3–4 days | Pending |
+| **P6** | Full integration & E2E testing | Homepage integration, complete user flow, real device E2E testing | 3–4 days | Pending |
+| **P7** | Optimization & polish | Performance optimization, UI refinement, error handling, documentation | 3–5 days | Pending |
 
 **Total estimate: 24–33 working days (~5–7 weeks)**
+
+---
+
+## Implementation Phases
+
+### Phase 0: Project Scaffold & Infrastructure — DONE
+
+> Next.js initialization, module skeleton, path aliases, SSR-safe infrastructure. All module pages accessible.
+
+- [x] Initialize Next.js project with TypeScript, ESLint, Tailwind CSS
+- [x] Configure path aliases (`@/modules/*`, `@/shared/*`, `@/components/*`)
+- [x] Create module directory structure (`ar/`, `qr/`, `three/`)
+- [x] Implement `DynamicClient` wrapper for SSR-safe browser API components
+- [x] Implement `useClientOnly` hook for client-only rendering guard
+- [x] Set up mobile viewport meta and responsive base styles
+- [x] Create placeholder pages for `/ar`, `/qr`, `/three` routes
+- [x] Verify all module pages accessible and SSR-safe
+
+**Deliverable**: M1 — Project skeleton runs; three module pages accessible
+
+---
+
+### Phase 1: Three.js Standalone Module — DONE
+
+> Standalone 3D scene rendering pipeline with demo page `/three`. Issue #3: https://github.com/wcyapplemist/AR-01/issues/3
+
+**Task dependency:**
+```
+P1.1 (types) ──────┬── P1.3 (SceneManager) ──┬── P1.4 (SceneBuilder)
+P1.2 (math utils)  │                         ├── P1.5 (ObjectFactory)
+P1.7 (FPSCounter)  │                         └── P1.6 (useThreeScene hook)
+       ↓           ↓                                  ↓
+       └──────────────────── P1.8 (demo page) ────────┘
+```
+
+- [x] P1.1: Define `ThreeSceneOptions` type — `src/modules/three/types.ts`
+- [x] P1.2: Implement math utility functions (quaternion/vector) — `src/shared/utils/math.ts`
+- [x] P1.3: Implement `SceneManager` service (core Three.js lifecycle) — `src/modules/three/services/SceneManager.ts`
+- [x] P1.4: Implement `SceneBuilder` service (lights, grid, axes) — `src/modules/three/services/SceneBuilder.ts`
+- [x] P1.5: Implement `ObjectFactory` service (geometry + GLTFLoader) — `src/modules/three/services/ObjectFactory.ts`
+- [x] P1.6: Implement `useThreeScene` React hook — `src/modules/three/hooks/useThreeScene.ts`
+- [x] P1.7: Implement `FPSCounter` component — `src/modules/three/components/FPSCounter.tsx`
+- [x] P1.8: Build `/three` demo page with scene controls — `src/app/three/page.tsx`
+- [x] Verify lint + typecheck pass and dev server renders `/three` correctly
+
+**Files created:**
+```
+src/modules/three/
+├── index.ts                      # Barrel export
+├── types.ts                      # ThreeSceneOptions
+├── services/
+│   ├── SceneManager.ts           # Core Three.js lifecycle
+│   ├── SceneBuilder.ts           # Scene setup (lights, grid, axes)
+│   └── ObjectFactory.ts          # Geometry creation + GLTFLoader
+├── hooks/
+│   └── useThreeScene.ts          # React hook for SceneManager
+└── components/
+    └── FPSCounter.tsx            # Frame rate display
+
+src/shared/utils/
+└── math.ts                       # Quaternion/vector math utilities
+```
+
+**Deliverable**: M2 — `/three` page displays rotating 3D scene with grid and axes
+
+---
+
+### Phase 2: Sensor-Based Positioning — Pending
+
+> DeviceMotion/Orientation collection, 6DoF pose estimation, position integration. Target: `/ar` page shows real-time sensor pose data via debug dashboard.
+
+- [ ] P2.1: Define sensor types and pose interfaces (`DevicePose`, `Orientation`, `Acceleration`)
+- [ ] P2.2: Implement `SensorPermission` service (iOS `DeviceMotionEvent.requestPermission()`, Android auto-grant)
+- [ ] P2.3: Implement `SensorCollector` service (DeviceMotion/Orientation event listeners, sampling rate control)
+- [ ] P2.4: Implement `CoordinateAligner` service (capture reference orientation at Start, subsequent poses relative to reference)
+- [ ] P2.5: Implement `PoseEstimator` service (acceleration → velocity → position with trapezoidal integration, velocity decay, threshold clipping)
+- [ ] P2.6: Implement `PositionIntegrator` service (6DoF pose from sensor fusion, double integration with drift mitigation)
+- [ ] P2.7: Implement `useSensorPose` React hook (real-time pose stream, start/stop controls)
+- [ ] P2.8: Implement `SensorDebugDashboard` component (display raw sensor data, estimated pose, drift metrics)
+- [ ] P2.9: Build `/ar` demo page with sensor debug dashboard
+- [ ] P2.10: Test on real devices (iOS Safari + Android Chrome)
+
+**Deliverable**: M3 — `/ar` page shows real-time sensor pose data (debug dashboard)
+
+---
+
+### Phase 3: QR Code Scanning Module — Pending
+
+> Camera + jsQR decode + content validation. Independent demo page `/qr`.
+
+- [ ] P3.1: Define QR types and interfaces (`QRResult`, `QRContent`, `ScanOptions`)
+- [ ] P3.2: Implement `CameraService` (rear camera access, stream management, platform differences)
+- [ ] P3.3: Implement `QRDecoder` service (jsQR integration, frame extraction, decode pipeline)
+- [ ] P3.4: Implement `QRContentValidator` service (content format validation, checksum verification)
+- [ ] P3.5: Implement `useQRScanner` React hook (start/stop scanning, result stream)
+- [ ] P3.6: Implement `QRScannerOverlay` component (viewfinder UI, scan region highlight, result display)
+- [ ] P3.7: Build `/qr` demo page with camera preview and scan overlay
+- [ ] P3.8: Test QR scanning on real devices with various QR Code formats
+
+**Deliverable**: M4 — `/qr` page scans and parses QR Code with overlay
+
+---
+
+### Phase 4: Dual Coordinate System & Drift Correction — Pending
+
+> Dual coordinate system (relative/absolute), QR calibration, AR.js visual drift correction.
+
+- [ ] P4.1: Define coordinate system types (`RelativePose`, `AbsolutePose`, `CoordinateFrame`)
+- [ ] P4.2: Implement `CoordinateTransformer` service (relative ↔ absolute coordinate conversion)
+- [ ] P4.3: Implement `QRCalibrationService` (QR scan initializes absolute origin, coordinate frame alignment)
+- [ ] P4.4: Implement `DriftCorrector` service (velocity decay tuning, threshold-based correction, trapezoidal refinement)
+- [ ] P4.5: Integrate AR.js visual correction pipeline (marker-based position correction)
+- [ ] P4.6: Implement `PositionFusion` service (sensor + QR + visual correction fusion with Kalman-like weighting)
+- [ ] P4.7: Implement `useDualCoordinate` React hook (expose both coordinate frames, correction events)
+- [ ] P4.8: Implement `DriftDebugOverlay` component (drift magnitude, correction events, coordinate frame visualization)
+- [ ] P4.9: Update `/ar` demo page with dual coordinate display and drift correction visualization
+- [ ] P4.10: Test drift correction accuracy with real device movement patterns
+
+**Deliverable**: M5 — QR scan initializes absolute coordinates; drift correction active
+
+---
+
+### Phase 5: AR Integration & Overlay Rendering — Pending
+
+> Camera background + 3D model overlay + HUD real-time display.
+
+- [ ] P5.1: Define AR overlay types (`AROverlayConfig`, `HUDData`, `ModelPlacement`)
+- [ ] P5.2: Implement `ARRenderer` service (camera feed as Three.js background, scene-AR synchronization)
+- [ ] P5.3: Implement `ModelOverlayService` (3D model placement in camera space, occlusion handling)
+- [ ] P5.4: Implement `HUDRenderer` component (real-time telemetry overlay: position, orientation, drift status)
+- [ ] P5.5: Implement `ARSceneController` service (coordinate system → Three.js scene mapping)
+- [ ] P5.6: Implement `useARScene` React hook (unified AR rendering pipeline)
+- [ ] P5.7: Build `/ar` AR demo page with camera + 3D overlay + HUD
+- [ ] P5.8: Verify all AR components are SSR-safe (`ssr: false`, client-only rendering)
+- [ ] P5.9: Test AR rendering on real devices (performance, latency, visual accuracy)
+
+**Deliverable**: M6 — Camera feed + 3D model overlay + HUD display
+
+---
+
+### Phase 6: Full Integration & E2E Testing — Pending
+
+> Homepage integration, complete user flow, real device end-to-end testing.
+
+- [ ] P6.1: Implement homepage with navigation to all modules (`/`, `/ar`, `/qr`, `/three`)
+- [ ] P6.2: Integrate QR calibration into AR flow (scan QR → initialize coordinates → begin AR)
+- [ ] P6.3: Implement complete user flow: launch → QR scan → AR tracking → overlay display
+- [ ] P6.4: Write E2E test scenarios for core user flows
+- [ ] P6.5: Perform real device E2E testing (iOS Safari + Android Chrome)
+- [ ] P6.6: Fix integration issues and cross-platform bugs
+- [ ] P6.7: Verify performance on target devices (frame rate, memory, battery)
+
+**Deliverable**: M7 — Complete user flow works end-to-end on real devices
+
+---
+
+### Phase 7: Optimization & Polish — Pending
+
+> Performance optimization, UI refinement, error handling, documentation.
+
+- [ ] P7.1: Profile and optimize rendering performance (Three.js scene, sensor processing, AR pipeline)
+- [ ] P7.2: Optimize sensor sampling and processing pipeline (reduce GC pressure, buffer management)
+- [ ] P7.3: Refine UI/UX across all pages (loading states, error states, responsive layout)
+- [ ] P7.4: Enhance error handling and recovery (sensor failures, camera access denied, QR decode errors)
+- [ ] P7.5: Add offline capability and graceful degradation
+- [ ] P7.6: Write API documentation and module guides
+- [ ] P7.7: Final cross-device testing and bug fixes
+- [ ] P7.8: Prepare release artifacts and deployment configuration
+
+**Deliverable**: M8 — Performance targets met; bugs fixed; documentation complete
 
 ---
 
@@ -31,13 +230,43 @@
 
 ## Milestones & Deliverables
 
-| Milestone | Phase | Demo |
-| --------- | ----- | ---- |
-| **M1: Infrastructure ready** | P0 | Project skeleton runs; three module pages accessible |
-| **M2: 3D rendering working** | P1 | `/three` page displays rotating 3D scene with grid and axes |
-| **M3: Sensor tracking working** | P2 | `/ar` page shows real-time sensor pose data (debug dashboard) |
-| **M4: QR scanning working** | P3 | `/qr` page scans and parses QR Code with overlay |
-| **M5: Dual coordinate system established** | P4 | QR scan initializes absolute coordinates; drift correction active |
-| **M6: AR overlay rendering** | P5 | Camera feed + 3D model overlay + HUD display |
-| **M7: Full integration** | P6 | Complete user flow works end-to-end on real devices |
-| **M8: Release ready** | P7 | Performance targets met; bugs fixed; documentation complete |
+| Milestone | Phase | Demo | Status |
+| --------- | ----- | ---- | ------ |
+| **M1: Infrastructure ready** | P0 | Project skeleton runs; three module pages accessible | **DONE** |
+| **M2: 3D rendering working** | P1 | `/three` page displays rotating 3D scene with grid and axes | **DONE** |
+| **M3: Sensor tracking working** | P2 | `/ar` page shows real-time sensor pose data (debug dashboard) | Pending |
+| **M4: QR scanning working** | P3 | `/qr` page scans and parses QR Code with overlay | Pending |
+| **M5: Dual coordinate system established** | P4 | QR scan initializes absolute coordinates; drift correction active | Pending |
+| **M6: AR overlay rendering** | P5 | Camera feed + 3D model overlay + HUD display | Pending |
+| **M7: Full integration** | P6 | Complete user flow works end-to-end on real devices | Pending |
+| **M8: Release ready** | P7 | Performance targets met; bugs fixed; documentation complete | Pending |
+
+---
+
+## Dependencies
+
+- **Three.js** → required for P0, P1, P5 (3D rendering)
+- **jsQR** → required for P3 (QR code decoding)
+- **AR.js** → required for P4 (visual drift correction)
+- **DeviceMotion/Orientation APIs** → required for P2 (sensor data), available on mobile browsers only
+- **WebRTC / MediaDevices API** → required for P3, P5 (camera access)
+
+## Risks & Mitigation
+
+| Risk | Impact | Likelihood | Mitigation |
+| ---- | ------ | ---------- | ---------- |
+| Sensor API unavailable on some browsers | High | Medium | Feature detection with graceful fallback; clear error messaging |
+| Inertial drift exceeds acceptable threshold | High | High | Multi-source correction (QR + visual); user recalibration prompt |
+| iOS Safari permission model restrictions | Medium | High | Explicit `requestPermission()` flow; user education in UI |
+| Performance degradation on low-end devices | Medium | Medium | Adaptive quality settings; frame skipping; resource budget limits |
+| Coordinate system misalignment after extended use | High | Medium | Periodic recalibration prompts; automatic drift detection |
+
+## Success Metrics
+
+- **P1**: `/three` renders at 60fps with < 16ms frame time
+- **P2**: Sensor pose updates at ≥ 60Hz with < 5ms processing latency
+- **P3**: QR decode time < 500ms on target devices
+- **P4**: Drift correction reduces accumulated error by > 80% after calibration
+- **P5**: AR overlay renders at ≥ 30fps on target devices
+- **P6**: Complete user flow completes in < 30 seconds from launch to AR display
+- **P7**: All pages load in < 2s on 4G; bundle size < 500KB gzipped
