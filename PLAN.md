@@ -35,7 +35,7 @@ src/
 | ----- | ---- | --------- | --------- | ------ |
 | **P0** | Project scaffold & infrastructure | Next.js initialization, module skeleton, path aliases, SSR-safe infrastructure | 2–3 days | **DONE** |
 | **P1** | Three.js standalone module | Standalone 3D scene rendering pipeline, demo page `/three` | 3–4 days | **DONE** |
-| **P2** | Sensor-based positioning | DeviceMotion/Orientation collection, 6DoF pose estimation, position integration | 4–5 days | Pending |
+| **P2** | Sensor-based positioning | DeviceMotion/Orientation collection, 6DoF pose estimation, position integration | 4–5 days | **DONE** |
 | **P3** | QR Code scanning module | Camera + jsQR decode + content validation, demo page `/qr` | 2–3 days | Pending |
 | **P4** | Dual coordinate system & drift correction | Dual coord system (relative/absolute), QR calibration, AR.js visual drift correction | 4–5 days | Pending |
 | **P5** | AR integration & overlay rendering | Camera background + 3D model overlay + HUD real-time display | 3–4 days | Pending |
@@ -110,20 +110,20 @@ src/shared/utils/
 
 ---
 
-### Phase 2: Sensor-Based Positioning — Pending
+### Phase 2: Sensor-Based Positioning — DONE
 
-> DeviceMotion/Orientation collection, 6DoF pose estimation, position integration. Target: `/ar` page shows real-time sensor pose data via debug dashboard.
+> DeviceMotion/Orientation collection, 6DoF pose estimation, position integration. Target: `/ar` page shows real-time sensor pose data via debug dashboard. Issue #5: https://github.com/wcyapplemist/AR-01/issues/5
 
-- [ ] P2.1: Define sensor types and pose interfaces (`DevicePose`, `Orientation`, `Acceleration`)
-- [ ] P2.2: Implement `SensorPermission` service (iOS `DeviceMotionEvent.requestPermission()`, Android auto-grant)
-- [ ] P2.3: Implement `SensorCollector` service (DeviceMotion/Orientation event listeners, sampling rate control)
-- [ ] P2.4: Implement `CoordinateAligner` service (capture reference orientation at Start, subsequent poses relative to reference)
-- [ ] P2.5: Implement `PoseEstimator` service (acceleration → velocity → position with trapezoidal integration, velocity decay, threshold clipping)
-- [ ] P2.6: Implement `PositionIntegrator` service (6DoF pose from sensor fusion, double integration with drift mitigation)
-- [ ] P2.7: Implement `useSensorPose` React hook (real-time pose stream, start/stop controls)
-- [ ] P2.8: Implement `SensorDebugDashboard` component (display raw sensor data, estimated pose, drift metrics)
-- [ ] P2.9: Build `/ar` demo page with sensor debug dashboard
-- [ ] P2.10: Test on real devices (iOS Safari + Android Chrome)
+- [x] P2.1: Define sensor types and pose interfaces (`DevicePose`, `Orientation`, `Acceleration`)
+- [x] P2.2: Implement `SensorPermission` service (iOS `DeviceMotionEvent.requestPermission()`, Android auto-grant)
+- [x] P2.3: Implement `SensorCollector` service (DeviceMotion/Orientation event listeners, sampling rate control)
+- [x] P2.4: Implement `CoordinateAligner` service (capture reference orientation at Start, subsequent poses relative to reference)
+- [x] P2.5: Implement `PoseEstimator` service (acceleration → velocity → position with trapezoidal integration, velocity decay, threshold clipping)
+- [x] P2.6: Implement `PositionIntegrator` service (6DoF pose from sensor fusion, double integration with drift mitigation)
+- [x] P2.7: Implement `useSensorPose` React hook (real-time pose stream, start/stop controls)
+- [x] P2.8: Implement `SensorDebugDashboard` component (display raw sensor data, estimated pose, drift metrics)
+- [x] P2.9: Build `/ar` demo page with sensor debug dashboard
+- [x] P2.10: Test on real devices (iOS Safari + Android Chrome)
 
 **Deliverable**: M3 — `/ar` page shows real-time sensor pose data (debug dashboard)
 
@@ -234,7 +234,7 @@ src/shared/utils/
 | --------- | ----- | ---- | ------ |
 | **M1: Infrastructure ready** | P0 | Project skeleton runs; three module pages accessible | **DONE** |
 | **M2: 3D rendering working** | P1 | `/three` page displays rotating 3D scene with grid and axes | **DONE** |
-| **M3: Sensor tracking working** | P2 | `/ar` page shows real-time sensor pose data (debug dashboard) | Pending |
+| **M3: Sensor tracking working** | P2 | `/ar` page shows real-time sensor pose data (debug dashboard) | **DONE** |
 | **M4: QR scanning working** | P3 | `/qr` page scans and parses QR Code with overlay | Pending |
 | **M5: Dual coordinate system established** | P4 | QR scan initializes absolute coordinates; drift correction active | Pending |
 | **M6: AR overlay rendering** | P5 | Camera feed + 3D model overlay + HUD display | Pending |

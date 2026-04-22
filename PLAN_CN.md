@@ -35,7 +35,7 @@ src/
 | ---- | ---- | ---- | -------- | ---- |
 | **P0** | 项目脚手架与基础设施 | Next.js 初始化、模块骨架、路径别名、SSR 安全基础设施 | 2–3 天 | **已完成** |
 | **P1** | Three.js 独立模块 | 独立 3D 场景渲染管线，演示页 `/three` | 3–4 天 | **已完成** |
-| **P2** | 传感器定位 | DeviceMotion/Orientation 采集、6DoF 姿态估计、位置积分 | 4–5 天 | 待开始 |
+| **P2** | 传感器定位 | DeviceMotion/Orientation 采集、6DoF 姿态估计、位置积分 | 4–5 天 | **已完成** |
 | **P3** | QR Code 扫描模块 | 摄像头 + jsQR 解码 + 内容验证，演示页 `/qr` | 2–3 天 | 待开始 |
 | **P4** | 双坐标系与漂移校正 | 双坐标系（相对/绝对）、QR 校准、AR.js 视觉漂移校正 | 4–5 天 | 待开始 |
 | **P5** | AR 集成与叠加渲染 | 摄像头背景 + 3D 模型叠加 + HUD 实时显示 | 3–4 天 | 待开始 |
@@ -110,20 +110,20 @@ src/shared/utils/
 
 ---
 
-### Phase 2：传感器定位 — 待开始
+### Phase 2：传感器定位 — 已完成
 
-> DeviceMotion/Orientation 采集、6DoF 姿态估计、位置积分。目标：`/ar` 页面通过调试仪表板显示实时传感器姿态数据。
+> DeviceMotion/Orientation 采集、6DoF 姿态估计、位置积分。目标：`/ar` 页面通过调试仪表板显示实时传感器姿态数据。Issue #5: https://github.com/wcyapplemist/AR-01/issues/5
 
-- [ ] P2.1：定义传感器类型和姿态接口（`DevicePose`、`Orientation`、`Acceleration`）
-- [ ] P2.2：实现 `SensorPermission` 服务（iOS `DeviceMotionEvent.requestPermission()`，Android 自动授权）
-- [ ] P2.3：实现 `SensorCollector` 服务（DeviceMotion/Orientation 事件监听、采样率控制）
-- [ ] P2.4：实现 `CoordinateAligner` 服务（Start 时捕获参考朝向，后续姿态相对参考计算）
-- [ ] P2.5：实现 `PoseEstimator` 服务（加速度 → 速度 → 位置，梯形积分、速度衰减、阈值裁剪）
-- [ ] P2.6：实现 `PositionIntegrator` 服务（传感器融合 6DoF 姿态，双重积分含漂移缓解）
-- [ ] P2.7：实现 `useSensorPose` React hook（实时姿态流、启停控制）
-- [ ] P2.8：实现 `SensorDebugDashboard` 组件（显示原始传感器数据、估计姿态、漂移指标）
-- [ ] P2.9：构建 `/ar` 演示页面（传感器调试仪表板）
-- [ ] P2.10：在真机上测试（iOS Safari + Android Chrome）
+- [x] P2.1：定义传感器类型和姿态接口（`DevicePose`、`Orientation`、`Acceleration`）
+- [x] P2.2：实现 `SensorPermission` 服务（iOS `DeviceMotionEvent.requestPermission()`，Android 自动授权）
+- [x] P2.3：实现 `SensorCollector` 服务（DeviceMotion/Orientation 事件监听、采样率控制）
+- [x] P2.4：实现 `CoordinateAligner` 服务（Start 时捕获参考朝向，后续姿态相对参考计算）
+- [x] P2.5：实现 `PoseEstimator` 服务（加速度 → 速度 → 位置，梯形积分、速度衰减、阈值裁剪）
+- [x] P2.6：实现 `PositionIntegrator` 服务（传感器融合 6DoF 姿态，双重积分含漂移缓解）
+- [x] P2.7：实现 `useSensorPose` React hook（实时姿态流、启停控制）
+- [x] P2.8：实现 `SensorDebugDashboard` 组件（显示原始传感器数据、估计姿态、漂移指标）
+- [x] P2.9：构建 `/ar` 演示页面（传感器调试仪表板）
+- [x] P2.10：在真机上测试（iOS Safari + Android Chrome）
 
 **交付物**：M3 — `/ar` 页面显示实时传感器姿态数据（调试仪表板）
 
@@ -234,7 +234,7 @@ src/shared/utils/
 | ------ | ---- | ---- | ---- |
 | **M1：基础设施就绪** | P0 | 项目骨架运行正常，三个模块页面可访问 | **已完成** |
 | **M2：3D 渲染可用** | P1 | `/three` 页面展示带网格和坐标轴的旋转 3D 场景 | **已完成** |
-| **M3：传感器追踪可用** | P2 | `/ar` 页面显示实时传感器姿态数据（调试仪表板） | 待开始 |
+| **M3：传感器追踪可用** | P2 | `/ar` 页面显示实时传感器姿态数据（调试仪表板） | **已完成** |
 | **M4：QR 扫描可用** | P3 | `/qr` 页面可扫描并解析 QR Code，带叠加层 | 待开始 |
 | **M5：双坐标系建立** | P4 | QR 扫描初始化绝对坐标，漂移校正生效 | 待开始 |
 | **M6：AR 叠加渲染** | P5 | 摄像头画面 + 3D 模型叠加 + HUD 显示 | 待开始 |
