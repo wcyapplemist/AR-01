@@ -36,7 +36,7 @@ src/
 | **P0** | Project scaffold & infrastructure | Next.js initialization, module skeleton, path aliases, SSR-safe infrastructure | 2–3 days | **DONE** |
 | **P1** | Three.js standalone module | Standalone 3D scene rendering pipeline, demo page `/three` | 3–4 days | **DONE** |
 | **P2** | Sensor-based positioning | DeviceMotion/Orientation collection, 6DoF pose estimation, position integration | 4–5 days | **DONE** |
-| **P3** | QR Code scanning module | Camera + jsQR decode + content validation, demo page `/qr` | 2–3 days | Pending |
+| **P3** | QR Code scanning module | Camera + jsQR decode + content validation, demo page `/qr` | 2–3 days | **DONE** |
 | **P4** | Dual coordinate system & drift correction | Dual coord system (relative/absolute), QR calibration, AR.js visual drift correction | 4–5 days | Pending |
 | **P5** | AR integration & overlay rendering | Camera background + 3D model overlay + HUD real-time display | 3–4 days | Pending |
 | **P6** | Full integration & E2E testing | Homepage integration, complete user flow, real device E2E testing | 3–4 days | Pending |
@@ -129,17 +129,17 @@ src/shared/utils/
 
 ---
 
-### Phase 3: QR Code Scanning Module — Pending
+### Phase 3: QR Code Scanning Module — DONE
 
 > Camera + jsQR decode + content validation. Independent demo page `/qr`.
 
-- [ ] P3.1: Define QR types and interfaces (`QRResult`, `QRContent`, `ScanOptions`)
-- [ ] P3.2: Implement `CameraService` (rear camera access, stream management, platform differences)
-- [ ] P3.3: Implement `QRDecoder` service (jsQR integration, frame extraction, decode pipeline)
-- [ ] P3.4: Implement `QRContentValidator` service (content format validation, checksum verification)
-- [ ] P3.5: Implement `useQRScanner` React hook (start/stop scanning, result stream)
-- [ ] P3.6: Implement `QRScannerOverlay` component (viewfinder UI, scan region highlight, result display)
-- [ ] P3.7: Build `/qr` demo page with camera preview and scan overlay
+- [x] P3.1: Define QR types and interfaces (`QRResult`, `QRContent`, `ScanOptions`)
+- [x] P3.2: Implement `CameraService` (rear camera access, stream management, platform differences)
+- [x] P3.3: Implement `QRDecoder` service (jsQR integration, frame extraction, decode pipeline)
+- [x] P3.4: Implement `QRContentValidator` service (content format validation, checksum verification)
+- [x] P3.5: Implement `useQRScanner` React hook (start/stop scanning, result stream)
+- [x] P3.6: Implement `QRScannerOverlay` component (viewfinder UI, scan region highlight, result display)
+- [x] P3.7: Build `/qr` demo page with camera preview and scan overlay
 - [ ] P3.8: Test QR scanning on real devices with various QR Code formats
 
 **Deliverable**: M4 — `/qr` page scans and parses QR Code with overlay
@@ -235,7 +235,7 @@ src/shared/utils/
 | **M1: Infrastructure ready** | P0 | Project skeleton runs; three module pages accessible | **DONE** |
 | **M2: 3D rendering working** | P1 | `/three` page displays rotating 3D scene with grid and axes | **DONE** |
 | **M3: Sensor tracking working** | P2 | `/ar` page shows real-time sensor pose data (debug dashboard) | **DONE** |
-| **M4: QR scanning working** | P3 | `/qr` page scans and parses QR Code with overlay | Pending |
+| **M4: QR scanning working** | P3 | `/qr` page scans and parses QR Code with overlay | **DONE** |
 | **M5: Dual coordinate system established** | P4 | QR scan initializes absolute coordinates; drift correction active | Pending |
 | **M6: AR overlay rendering** | P5 | Camera feed + 3D model overlay + HUD display | Pending |
 | **M7: Full integration** | P6 | Complete user flow works end-to-end on real devices | Pending |
