@@ -150,15 +150,15 @@ src/shared/utils/
 
 > Dual coordinate system (relative/absolute), QR calibration, AR.js visual drift correction.
 
-- [ ] P4.1: Define coordinate system types (`RelativePose`, `AbsolutePose`, `CoordinateFrame`)
-- [ ] P4.2: Implement `CoordinateTransformer` service (relative ↔ absolute coordinate conversion)
-- [ ] P4.3: Implement `QRCalibrationService` (QR scan initializes absolute origin, coordinate frame alignment)
-- [ ] P4.4: Implement `DriftCorrector` service (velocity decay tuning, threshold-based correction, trapezoidal refinement)
-- [ ] P4.5: Integrate AR.js visual correction pipeline (marker-based position correction)
-- [ ] P4.6: Implement `PositionFusion` service (sensor + QR + visual correction fusion with Kalman-like weighting)
-- [ ] P4.7: Implement `useDualCoordinate` React hook (expose both coordinate frames, correction events)
-- [ ] P4.8: Implement `DriftDebugOverlay` component (drift magnitude, correction events, coordinate frame visualization)
-- [ ] P4.9: Update `/ar` demo page with dual coordinate display and drift correction visualization
+- [x] P4.1: Define coordinate system types (`RelativePose`, `AbsolutePose`, `CoordinateFrame`)
+- [x] P4.2: Implement `CoordinateTransformer` service (relative ↔ absolute coordinate conversion)
+- [x] P4.3: Implement `QRCalibrationService` (QR scan initializes absolute origin, coordinate frame alignment)
+- [x] P4.4: Implement `DriftCorrector` service (velocity decay tuning, threshold-based correction, trapezoidal refinement)
+- [x] P4.5: Integrate AR.js visual correction pipeline (marker-based position correction)
+- [x] P4.6: Implement `PositionFusion` service (sensor + QR + visual correction fusion with Kalman-like weighting)
+- [x] P4.7: Implement `useDualCoordinate` React hook (expose both coordinate frames, correction events)
+- [x] P4.8: Implement `DriftDebugOverlay` component (drift magnitude, correction events, coordinate frame visualization)
+- [x] P4.9: Update `/ar` demo page with dual coordinate display and drift correction visualization
 - [ ] P4.10: Test drift correction accuracy with real device movement patterns
 
 **Deliverable**: M5 — QR scan initializes absolute coordinates; drift correction active

@@ -150,15 +150,15 @@ src/shared/utils/
 
 > 双坐标系（相对/绝对）、QR 校准、AR.js 视觉漂移校正。
 
-- [ ] P4.1：定义坐标系类型（`RelativePose`、`AbsolutePose`、`CoordinateFrame`）
-- [ ] P4.2：实现 `CoordinateTransformer` 服务（相对 ↔ 绝对坐标转换）
-- [ ] P4.3：实现 `QRCalibrationService`（QR 扫描初始化绝对原点、坐标系对齐）
-- [ ] P4.4：实现 `DriftCorrector` 服务（速度衰减调优、阈值校正、梯形精细化）
-- [ ] P4.5：集成 AR.js 视觉校正管线（基于标记的位置校正）
-- [ ] P4.6：实现 `PositionFusion` 服务（传感器 + QR + 视觉校正融合，类卡尔曼加权）
-- [ ] P4.7：实现 `useDualCoordinate` React hook（暴露双坐标系、校正事件）
-- [ ] P4.8：实现 `DriftDebugOverlay` 组件（漂移量、校正事件、坐标系可视化）
-- [ ] P4.9：更新 `/ar` 演示页面（双坐标显示 + 漂移校正可视化）
+- [x] P4.1：定义坐标系类型（`RelativePose`、`AbsolutePose`、`CoordinateFrame`）
+ - [x] P4.2：实现 `CoordinateTransformer` 服务（相对 ↔ 绝对坐标转换）
+- [x] P4.3：实现 `QRCalibrationService`（QR 扫描初始化绝对原点、坐标系对齐）
+- [x] P4.4：实现 `DriftCorrector` 服务（速度衰减调优、阈值校正、梯形精细化）
+- [x] P4.5：集成 AR.js 视觉校正管线（基于标记的位置校正）
+- [x] P4.6：实现 `PositionFusion` 服务（传感器 + QR + 视觉校正融合，类卡尔曼加权）
+- [x] P4.7：实现 `useDualCoordinate` React hook（暴露双坐标系、校正事件）
+- [x] P4.8：实现 `DriftDebugOverlay` 组件（漂移量、校正事件、坐标系可视化）
+- [x] P4.9：更新 `/ar` 演示页面（双坐标显示 + 漂移校正可视化）
 - [ ] P4.10：使用真机运动模式测试漂移校正精度
 
 **交付物**：M5 — QR 扫描初始化绝对坐标，漂移校正生效

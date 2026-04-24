@@ -1,4 +1,4 @@
-import type { Vector3, Quaternion } from "@/shared/types";
+import type { Vector3, Quaternion, Pose } from "@/shared/types";
 
 export interface Orientation {
   alpha: number;
@@ -56,12 +56,87 @@ export interface SensorDebugData {
   sensorStatus: SensorStatus;
 }
 
+export interface RelativePose {
+  pose: Pose;
+  timestamp: number;
+  driftEstimate: number;
+}
+
+export interface AbsolutePose {
+  pose: Pose;
+  timestamp: number;
+  source: "qr" | "visual" | "fusion";
+  confidence: number;
+}
+
+export interface CoordinateFrame {
+  id: string;
+  origin: Vector3;
+  orientation: Quaternion;
+  createdAt: number;
+  lastUpdated: number;
+  calibrationSource: "qr" | "manual";
+  correctionCount: number;
+}
+
+export interface DriftCorrectionEvent {
+  timestamp: number;
+  type: "qr" | "visual" | "decay" | "threshold";
+  beforePose: Pose;
+  afterPose: Pose;
+  correctionDelta: Vector3;
+  confidence: number;
+}
+
+export interface DriftCorrectionConfig {
+  velocityDecay: number;
+  accelerationThreshold: number;
+  maxVelocity: number;
+  correctionThreshold: number;
+  maxCorrectionStep: number;
+  qrConfidenceWeight: number;
+  visualConfidenceWeight: number;
+  sensorConfidenceWeight: number;
+}
+
+export interface FusionState {
+  relativePose: RelativePose;
+  absolutePose: AbsolutePose | null;
+  frame: CoordinateFrame | null;
+  lastCorrection: DriftCorrectionEvent | null;
+  fusionWeights: {
+    sensor: number;
+    qr: number;
+    visual: number;
+  };
+}
+
+export interface VisualCorrection {
+  markerId: string;
+  detectedPosition: Vector3;
+  absolutePosition: Vector3;
+  correctionDelta: Vector3;
+  confidence: number;
+  timestamp: number;
+}
+
 export const DEFAULT_SENSOR_CONFIG: SensorConfig = {
   samplingRate: 60,
   velocityDecayFactor: 0.98,
   accelerationThreshold: 0.1,
   maxVelocity: 2.0,
   orientationSmoothing: 0.8,
+};
+
+export const DEFAULT_DRIFT_CORRECTION_CONFIG: DriftCorrectionConfig = {
+  velocityDecay: 0.98,
+  accelerationThreshold: 0.1,
+  maxVelocity: 2.0,
+  correctionThreshold: 0.05,
+  maxCorrectionStep: 0.5,
+  qrConfidenceWeight: 0.9,
+  visualConfidenceWeight: 0.7,
+  sensorConfidenceWeight: 0.3,
 };
 
 export type { Vector3, Quaternion, Pose, TimestampedPose, DualCoordinateState } from "@/shared/types";
