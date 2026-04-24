@@ -8,6 +8,18 @@ import SensorDebugDashboard from "@/modules/ar/components/SensorDebugDashboard";
 import DriftDebugOverlay from "@/modules/ar/components/DriftDebugOverlay";
 import { quaternionToEuler } from "@/shared/utils/math";
 import type { DevicePose } from "@/modules/ar/types";
+import type { QRContent } from "@/modules/qr/types";
+
+function useQRCalibration(calibrateFromQR: (qr: QRContent) => unknown) {
+  const seenIds = useRef(new Set<string>());
+
+  return useCallback((qr: QRContent | null) => {
+    if (!qr || !qr.isValid || seenIds.current.has(qr.id)) return false;
+    seenIds.current.add(qr.id);
+    calibrateFromQR(qr);
+    return true;
+  }, [calibrateFromQR]);
+}
 
 function DualPoseDisplay({
   relativePose,
@@ -116,20 +128,19 @@ export default function ARPage() {
   } = useQRScanner();
 
   const [toast, setToast] = useState<string | null>(null);
+  const handleCalibrate = useQRCalibration(calibrateFromQR);
 
   useEffect(() => {
     if (!qrContent || !qrContent.isValid) return;
-    try {
-      calibrateFromQR(qrContent);
-      setToast(`Calibrated from QR: ${qrContent.id}`);
-      stopScanning();
-    } catch (e) {
-      setToast(e instanceof Error ? e.message : "Calibration failed");
-    }
-  }, [qrContent, calibrateFromQR, stopScanning]);
+    if (!handleCalibrate(qrContent)) return;
+    stopScanning();
+    queueMicrotask(() => setToast(`Calibrated from QR: ${qrContent.id}`));
+  }, [qrContent, handleCalibrate, stopScanning]);
 
   useEffect(() => {
-    if (qrError) setToast(qrError);
+    if (!qrError) return;
+    const msg = qrError;
+    queueMicrotask(() => setToast(msg));
   }, [qrError]);
 
   const handleScanQR = useCallback(() => {

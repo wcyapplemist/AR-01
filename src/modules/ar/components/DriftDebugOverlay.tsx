@@ -43,7 +43,7 @@ function fmt3(v: number): string {
 }
 
 function DriftDebugOverlayInner(props: DriftDebugOverlayProps) {
-  const { fusionState, driftStats, lastCorrection, isCalibrated, calibrationHistory } = props;
+  const { fusionState, driftStats, lastCorrection, isCalibrated } = props;
   const refs = useRef<RefMap>({});
   const setRef = useCallback((key: string) => (el: HTMLSpanElement | null) => {
     refs.current[key] = el;
@@ -127,8 +127,6 @@ function DriftDebugOverlayInner(props: DriftDebugOverlayProps) {
       set("frame-since", since + "s");
     }
   }, [fusionState, driftStats, lastCorrection]);
-
-  const lastCalib = calibrationHistory[calibrationHistory.length - 1];
 
   return (
     <div className="fixed top-0 left-0 bottom-0 w-72 max-[400px]:w-full overflow-y-auto bg-black/80 text-white text-xs font-mono p-3 space-y-3 z-50">

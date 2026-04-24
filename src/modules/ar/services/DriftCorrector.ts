@@ -14,7 +14,6 @@ import {
   subtractVectors,
   addVectors,
   lerp as lerpNum,
-  vectorDistance,
 } from "@/shared/utils/math";
 import { CoordinateTransformer } from "./CoordinateTransformer";
 
@@ -42,12 +41,6 @@ export class DriftCorrector {
     }
 
     const elapsedTime = (rawPose.timestamp - this.startTimestamp) / 1000;
-
-    const accMag = vectorMagnitude(rawPose.acceleration);
-    const filteredAcc: Vector3 =
-      accMag < this.config.accelerationThreshold
-        ? { ...ZERO_VEC }
-        : rawPose.acceleration;
 
     const decayedVel = scaleVector(
       rawPose.velocity,

@@ -8,12 +8,10 @@ import type { QRContent } from "@/modules/qr/types";
 import type { Vector3, Quaternion } from "@/shared/types";
 import {
   subtractVectors,
-  addVectors,
   vectorDistance,
   lerp,
   rotateVectorByQuaternion,
   conjugateQuaternion,
-  scaleVector,
 } from "@/shared/utils/math";
 import { CoordinateTransformer } from "./CoordinateTransformer";
 

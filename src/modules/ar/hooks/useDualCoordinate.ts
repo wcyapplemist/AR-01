@@ -53,6 +53,7 @@ export function useDualCoordinate(
 
     const unsubCorrection = fusion.onCorrection((event) => {
       setLastCorrection(event);
+      setDriftStats(fusion.getDriftStats());
     });
 
     const unsubPose = integrator.onPoseUpdate((pose) => {

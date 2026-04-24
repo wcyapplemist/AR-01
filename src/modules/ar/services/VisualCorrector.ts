@@ -8,8 +8,6 @@ import type { Vector3 } from "@/shared/types";
 import {
   addVectors,
   subtractVectors,
-  vectorMagnitude,
-  normalizeVector,
   scaleVector,
   rotateVectorByQuaternion,
   conjugateQuaternion,
@@ -22,7 +20,6 @@ interface RegisteredMarker {
 }
 
 const DEFAULT_FOV = 60;
-const IDEAL_DISTANCE = 2.0;
 const MAX_DISTANCE = 10.0;
 
 export class VisualCorrector {
@@ -126,12 +123,13 @@ export class VisualCorrector {
   }
 
   private detectMarkerInFrame(
-    _videoFrame: HTMLVideoElement | HTMLCanvasElement,
+    _videoFrame?: HTMLVideoElement | HTMLCanvasElement,
   ): {
     id: string;
     pixelSize: number;
     centerX: number;
   } | null {
+    void _videoFrame;
     return null;
   }
 

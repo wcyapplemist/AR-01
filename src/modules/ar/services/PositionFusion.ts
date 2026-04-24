@@ -4,12 +4,10 @@ import type {
   DriftCorrectionEvent,
   FusionState,
   CoordinateFrame,
-  RelativePose,
 } from "../types";
 import { DEFAULT_DRIFT_CORRECTION_CONFIG } from "../types";
 import type { VisualCorrection } from "../types";
 import type { QRContent } from "@/modules/qr/types";
-import { addVectors, scaleVector, vectorMagnitude, subtractVectors } from "@/shared/utils/math";
 import { DriftCorrector } from "./DriftCorrector";
 import { CoordinateTransformer } from "./CoordinateTransformer";
 import { QRCalibrationService } from "./QRCalibrationService";
@@ -85,7 +83,7 @@ export class PositionFusion {
       this.pendingVisual = null;
     }
 
-    let targetWeights = this.hasVisualCorrection
+    const targetWeights = this.hasVisualCorrection
       ? { ...WEIGHTS_WITH_VISUAL }
       : { ...WEIGHTS_NO_VISUAL };
 
@@ -158,6 +156,10 @@ export class PositionFusion {
         this.hasVisualCorrection ? WEIGHTS_WITH_VISUAL : WEIGHTS_NO_VISUAL,
       ),
     };
+  }
+
+  getDriftStats() {
+    return this.driftCorrector.getDriftStats();
   }
 
   onFusionUpdate(callback: (state: FusionState) => void): () => void {
